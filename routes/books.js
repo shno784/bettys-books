@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const redirectLogin = require('../middleware/redirectLogin')
 
 router.get("/search", redirectLogin, function (req, res, next) {
   res.render("search.ejs");

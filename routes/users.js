@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const redirectLogin = require('../middleware/redirectLogin')
 
 router.get("/register", function (req, res, next) {
   res.render("register.ejs");

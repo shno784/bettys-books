@@ -45,14 +45,6 @@ db.connect((err) => {
     console.log('Connected to database')
 })
 global.db = db
-
-global.redirectLogin = (req, res, next) => {
-    if (!req.session.userId) {
-      res.redirect("/users/login"); // redirect to the login page
-    } else {
-      next(); // move to the next middleware function
-    }
-  };
   
 // Define our application-specific data
 app.locals.shopData = {shopName: "Bettys Books"}

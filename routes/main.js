@@ -1,6 +1,7 @@
 // Create a new router
 const express = require("express");
 const router = express.Router();
+const redirectLogin = require('../middleware/redirectLogin')
 
 // Handle our routes
 router.get("/", function (req, res, next) {
