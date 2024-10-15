@@ -3,6 +3,14 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
+const redirectLogin = (req, res, next) => {
+  if (!req.session.userId) {
+    res.redirect("./login"); // redirect to the login page
+  } else {
+    next(); // move to the next middleware function
+  }
+};
+
 router.get("/register", function (req, res, next) {
   res.render("register.ejs");
 });
@@ -46,7 +54,7 @@ router.post("/registered", function (req, res, next) {
   });
 });
 
-router.get("/list", function (req, res, next) {
+router.get("/list", redirectLogin, function (req, res, next) {
   let sqlquery = "SELECT * FROM users";
   db.query(sqlquery, (err, result) => {
     if (err) {
@@ -75,14 +83,29 @@ router.post("/loggedin", function (req, res, next) {
         if (err) {
           next(err);
         } else if (result == true) {
-          // TODO: Send message
-          res.send("Sucessfully logged in " + name);
+          // Save user session here, when login is successful
+          req.session.userId = name;
+          //Adds a login flag to tell if the user is logged in
+          req.session.isLoggedIn = true;
+          res.send(
+            "Sucessfully logged in " + name + "<a href=" + "/" + ">  Home</a>"
+          );
         } else {
           // TODO: Send message
           res.send("Incorrect Password");
         }
       });
     }
+  });
+});
+
+//Logout
+router.get("/logout", redirectLogin, (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("./");
+    }
+    res.send("you are now logged out. <a href=" + "/" + ">Home</a>");
   });
 });
 
