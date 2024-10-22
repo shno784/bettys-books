@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const redirectLogin = require('../middleware/redirectLogin')
+const redirectLogin = require("../middleware/redirectLogin");
+const { check, validationResult } = require("express-validator");
 
 router.get("/search", redirectLogin, function (req, res, next) {
   res.render("search.ejs");
@@ -34,23 +35,36 @@ router.get("/addbook", redirectLogin, function (req, res, next) {
   res.render("addbook.ejs");
 });
 
-router.post("/bookadded", redirectLogin, function (req, res, next) {
-  // saving data in database
-  let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)";
-  // execute sql query
-  let newrecord = [req.body.name, req.body.price];
-  db.query(sqlquery, newrecord, (err, result) => {
-    if (err) {
-      next(err);
-    } else
-      res.send(
-        " This book is added to database, name: " +
-          req.body.name +
-          " price " +
-          req.body.price
-      );
-  });
-});
+router.post(
+  "/bookadded",
+  [check("price").isFloat().notEmpty().withMessage("Price must be a number")],
+  redirectLogin,
+  function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("addbook", {
+        errors: errors.array(), // Pass errors to template
+        data: req.body, // Pass form data back to populate fields
+      });
+    } else {
+      // saving data in database
+      let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)";
+      // execute sql query
+      let newrecord = [req.body.name, req.body.price];
+      db.query(sqlquery, newrecord, (err, result) => {
+        if (err) {
+          next(err);
+        } else
+          res.send(
+            " This book is added to database, name: " +
+              req.body.name +
+              " price " +
+              req.body.price
+          );
+      });
+    }
+  }
+);
 
 router.get("/bargainbooks", function (req, res, next) {
   let sqlquery = "SELECT * FROM books WHERE price < 20";
