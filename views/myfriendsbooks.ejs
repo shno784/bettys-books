@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <title>My Friends books</title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1>My Friends Books </h1>
+    <% books.forEach(function(book) { %>
+        <li> ID: <%= book.id %> <%= book.name %>, £<%=book.price%> </li>
+      <% }) %>
+  </body>
+</html>
