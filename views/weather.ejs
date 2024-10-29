@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Add a city</title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1>Add a City</h1>
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <ul>
+        <% errors.forEach(function(error) { %>
+          <li style="color: red"><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form method="GET" action="/weather">
+        <p>City: <input id="city" type="text" name="city" /></p>
+        <input type="submit" value="Submit" />
+    </form>
+
+    <%- typeof wmsg !== 'undefined' ? wmsg : '' %>
+  </body>
+</html>

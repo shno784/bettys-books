@@ -22,5 +22,6 @@ router.get("/logout", redirectLogin, (req, res) => {
   });
 });
 
+
 // Export the router object so index.js can access it
 module.exports = router;
