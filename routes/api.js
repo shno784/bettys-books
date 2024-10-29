@@ -30,10 +30,8 @@ router.get('/myfriendsbooks', function(req, res, next) {
         if (err) {
           next(err);
         } else {
-            var books = JSON.parse(body);
-            if (books !== undefined && books.main !== undefined) {
-                res.send(body)
-            }
+            const books = JSON.parse(body)
+            res.json(books)
         }
       });
 
