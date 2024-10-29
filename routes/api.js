@@ -4,7 +4,6 @@ const redirectLogin = require("../middleware/redirectLogin");
 const { check, validationResult } = require("express-validator");
 
 
-
 router.get('/books', function (req, res, next) {
 
     // Query database to get all the books
@@ -21,6 +20,22 @@ router.get('/books', function (req, res, next) {
             res.json(result)
         }
     })
+})
+
+router.get('/myfriendsbooks', function(req, res, next) {
+    let url = 'https://www.doc.gold.ac.uk/usr/109/api/books';
+
+    request(url, function (err, response, body) {
+        if (err) {
+          next(err);
+        } else {
+            var books = JSON.parse(body);
+            if (books !== undefined && books.main !== undefined) {
+                res.send(body)
+            }
+        }
+      });
+
 })
 
 module.exports = router;
